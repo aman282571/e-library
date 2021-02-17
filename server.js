@@ -126,6 +126,7 @@ app.post('/email/:id',upload.none(),(req,res)=>{
                     console.log(err); 
                 } else { 
                     console.log('Email sent successfully'); 
+                     res.json("successful")
                 } 
                 
             });
