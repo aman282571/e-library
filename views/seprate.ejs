@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Individual</title>
+    <link rel="stylesheet" href="../cssfiles/seprate.css">
+</head>
+<body>
+    
+    <div class="container">
+        <div class="book">
+          <div class="image">
+          <img id="image" src="../upload/<%= data.filename%>" alt="">
+          </div>
+          <p class="bookname">
+           <b>  <%= data.bookname  %></b>
+          </p>
+          <p class="desc">
+           <b> About the book : </b><%= data.desc  %> 
+          </p>
+        </div>
+
+        <div class="borrow">
+         <form action="" id='form' enctype="multipart/form-data">
+             <h3>Borrow a book</h3>
+         <p> <label for="name"> Name:</label></p>
+         <input type=" text" id="name" name="name" required="required">
+         <p> <label for="email"> Email:</label></p>
+         <input type="email" id="email"name="email" required="required"> <br>
+         <p> <label for="email"> Amount to pay:</label></p>
+         <input type="number" id="number" value=<%= data.amount  %> readonly <br>
+         <input type="submit">
+         </form>
+        </div>
+        
+        <%if(data){%>
+        <script>
+            
+          document.getElementById('form').addEventListener('submit',(e)=>{  
+              
+               e.preventDefault() 
+              fetch('/email/<%= data._id %>',{ 
+                       method:"POST", 
+                     body: new FormData(form) 
+                    })
+                    console.log("sent")
+                    alert("Mail has been sent to the owner of the book.He/She will contact you soon")
+                   e.target.name.value=""
+                   e.target.email.value=""
+        
+             }) 
+            </script>
+            <%}%> 
+    </div>
+   <script >
+ 
+ 
+   </script>
+</body>
+</html>

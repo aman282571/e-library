@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+    <link rel="stylesheet" href="../cssfiles/homepage.css">
+</head>
+<body>
+    <header>
+        <p class="user">Hello <%= user.name%></p>
+    <div class="filter">
+        <input type="text" class="input" value=""  placeholder="search book..">
+        <p class="addnewbook"> Add new Book </p>
+    </div>
+    </header>
+    <div class="showcase" id="showcase">
+        
+       
+
+    </div>
+    
+    <form action="" id="form" enctype="multipart/form-data" >
+        <h3>ADD NEW BOOK</h3>
+        <p><label for="name"> Your Name:</label></p>
+        <input type="text" id="name" name="name" required="required" >
+    
+        <p><label for="bookname"> Book Name:</label></p>
+        <input type="text" id="bookname" name="bookname" required="required" >
+    
+      <p>  <label for="desc"> Description:</label></p>
+      <textarea name="desc" id="desc"  rows="4" style="resize: none;" required="required" ></textarea> 
+
+      <p><label for="email"> Email:</label></p>
+        <input type="email" id="email" name="email" required="required">
+
+        <p><label for="amount"> Borrowing amount:</label></p>
+        <input type="number" id="amount" name="amount" required="required">
+
+      <p><label for="file"> Add a photo:</label></p>
+      <input type="file" id="file" name="bookphoto"  required="required" >
+
+      <input type="submit" value="Add Book">
+    </form>
+  
+</body>
+<script>
+    document.querySelector(".addnewbook").addEventListener('click',()=>{
+        document.getElementById("form").classList.toggle("showform")
+    })
+    showcase=document.getElementById("showcase")
+    //add new book
+    form=document.getElementById("form")
+    form.addEventListener("submit",(e)=>{
+        e.preventDefault()
+        document.getElementById("form").classList.toggle("showform")
+        
+        
+        fetch("/add",{
+            method:"POST",
+            body: new FormData(form)
+        }).then((Response)=>{
+            return Response.json()
+        }).then((data)=>{
+            const ids= setids(data)
+            displaydata(data,ids)
+            
+        })
+        for(let i=0;i<6;i++){
+            e.target.elements[i].value=""
+        }
+      
+        })
+
+        //setids
+        function setids(chunk){
+            return{
+                deleteid:`delete_${chunk._id}`
+            }
+        }
+
+        //displaying data
+        function displaydata(chunk,ids){
+            div=document.createElement('div')
+            div.id=`${chunk._id}`
+          
+            const src=`../upload/${chunk.filename}`
+          
+            sepratepageurl= `/seprate/${chunk._id}`
+            div.innerHTML=`   <a href=${sepratepageurl}><p class="image">  <img src=${src}> </p>
+            <p class="name"><b> Name : </b>${chunk.bookname}</p>
+            <p class="description"><b>Description : </b>${chunk.desc}</p> </a>
+            <p class="remove"><button id=${ids.deleteid}>Delete Book</button> </p>`
+            showcase.prepend(div)
+
+           //searching book
+           document.querySelector(".input").addEventListener('keyup',(e)=>{
+            if( chunk.bookname.toLowerCase().indexOf(e.target.value.toLowerCase())===-1){
+            document.getElementById(`${chunk._id}`).style.display='none';
+         }
+         else
+         document.getElementById(`${chunk._id}`).style.display='block';
+        })
+
+           //deleting data
+           document.getElementById(`${ids.deleteid}`).addEventListener('click',()=>{
+               res=confirm("This book will be deleted permanently")
+               if(res){
+             fetch(`/deletebook/${chunk._id}`,{
+                 method:'delete',
+
+             })
+             document.getElementById(`${chunk._id}`).remove()
+            }    
+        })
+    }
+            
+        
+
+        //fetchind all data from server
+        const fetchdata= function(){
+            fetch('/fetchdata').then((response)=>{
+                return response.json()
+            }).then((data)=>{
+                data.forEach((chunk)=>{
+                   const ids= setids(chunk)
+                    displaydata(chunk,ids)
+                })
+                
+            })
+
+        }
+        fetchdata();
+   
+    
+</script>
+</html>
