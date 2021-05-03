@@ -44,11 +44,13 @@
               fetch('/email/<%= data._id %>',{ 
                        method:"POST", 
                      body: new FormData(form) 
+                    }).then(()=>{
+                      alert("Mail has been sent to the owner of the book.He/She will contact you soon")
+                      e.target.name.value=""
+                      e.target.email.value=""
                     })
-                    console.log("sent")
-                    alert("Mail has been sent to the owner of the book.He/She will contact you soon")
-                   e.target.name.value=""
-                   e.target.email.value=""
+                   
+               
         
              }) 
             </script>
