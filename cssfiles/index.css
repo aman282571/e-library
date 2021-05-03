@@ -12,6 +12,7 @@ body {
 
 	background-size: cover;
 }
+
 form {
 	margin: auto;
 	position: absolute;
@@ -81,6 +82,13 @@ h3 {
 	position: absolute;
 	margin-top: 5px;
 }
+h4 > p {
+	display: inline;
+	font-size: 10px;
+	color: skyblue;
+	font-weight: 800;
+}
+
 h4 > p {
 	display: inline;
 	font-size: 10px;

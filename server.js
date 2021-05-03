@@ -93,6 +93,7 @@ app.get('/seprate/:id', (req, res) => {
 	});
 });
 //email the owner
+
 app.post('/email/:id', upload.none(), (req, res) => {
 	info.findById(req.params.id, (err, data) => {
 		if (err) console.log(err);
@@ -121,6 +122,7 @@ app.post('/email/:id', upload.none(), (req, res) => {
 				if (err) {
 					console.log(err);
 				} else {
+					console.log('Email sent successfully');
 					res.json('successful');
 				}
 			});
